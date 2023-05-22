@@ -1,0 +1,20 @@
+#  @author: Marco Giberna
+#  @email: marco.giberna@studenti.units.it
+#  @email: marcogiberna@gmail.com
+obstacle_range: 4.5 # the maximum range sensor reading that will result in an obstacle being put into the costmap
+raytrace_range: 5.0 # the range to which we will raytrace freespace given a sensor reading
+footprint: [[0.4, 0.3], [0.4, -0.3], [-0.4,-0.3], [-0.4, 0.3]]
+                #          x: 0.36574 #0.35933
+                #          y: 0.22150
+#robot_radius: ir_of_robot
+inflation_radius: 1.35 # should be set to the maximum distance from obstacles at which a cost should be incurred
+
+observation_sources: laser_scan_sensor point_cloud_sensor
+
+laser_scan_sensor: {sensor_frame: Archimede_scan_link, data_type: LaserScan, topic: /Archimede/scan, marking: true, clearing: true}
+
+#point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, data_type: PointCloud2, topic: /scan_matched_points2, marking: true, clearing: true}
+point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, data_type: PointCloud2, topic: /Archimede/d435i_camera/depth/color/points, marking: true, clearing: true}
+
+
+       
