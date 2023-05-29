@@ -10,6 +10,10 @@ project(robot4ws_navigation)
 find_package(catkin REQUIRED COMPONENTS
   move_base
   robot4ws_description
+  roscpp
+  actionlib
+  move_base_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -203,3 +207,5 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_executable(simple_navigation_goals src/simple_navigation_goals.cpp)
+target_link_libraries(simple_navigation_goals ${catkin_LIBRARIES})
