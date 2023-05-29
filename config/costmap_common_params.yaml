@@ -2,19 +2,131 @@
 #  @email: marco.giberna@studenti.units.it
 #  @email: marcogiberna@gmail.com
 obstacle_range: 4.5 # the maximum range sensor reading that will result in an obstacle being put into the costmap
-raytrace_range: 5.0 # the range to which we will raytrace freespace given a sensor reading
+raytrace_range: 8.0 # the range to which we will raytrace freespace given a sensor reading
 footprint: [[0.4, 0.3], [0.4, -0.3], [-0.4,-0.3], [-0.4, 0.3]]
                 #          x: 0.36574 #0.35933
                 #          y: 0.22150
+footprint_padding: 0.03
 #robot_radius: ir_of_robot
-inflation_radius: 1.35 # should be set to the maximum distance from obstacles at which a cost should be incurred
+inflation_radius: 0.4 # should be set to the maximum distance from obstacles at which a cost should be incurred
+transform_tolerance: 0.2
+controller_patience: 2.0
 
 observation_sources: laser_scan_sensor point_cloud_sensor
 
-laser_scan_sensor: {sensor_frame: Archimede_scan_link, data_type: LaserScan, topic: /Archimede/scan, marking: true, clearing: true}
+# laser_scan_sensor: {sensor_frame: odom, 
+#                     data_type: LaserScan, 
+#                     topic: /Archimede/scan, 
+#                     marking: true, 
+#                     clearing: true,
+#                     max_obstacle_height: 2, 
+#                     min_obstacle_height: -0.5}
 
 #point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, data_type: PointCloud2, topic: /scan_matched_points2, marking: true, clearing: true}
-point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, data_type: PointCloud2, topic: /Archimede/d435i_camera/depth/color/points, marking: true, clearing: true}
+# point_cloud_sensor: {sensor_frame: map, 
+#                     data_type: PointCloud2, 
+#                     topic: /Archimede/d435i_camera/depth/color/points, 
+#                     marking: true, 
+#                     clearing: true, 
+#                     max_obstacle_height: 2, 
+#                     min_obstacle_height: -0.5}
+
+recovery_behaviors: [
+    {name: conservative_clear, type: clear_costmap_recovery/ClearCostmapRecovery},
+    {name: aggressive_clear, type: clear_costmap_recovery/ClearCostmapRecovery}
+]
+conservative_clear: 
+    reset_distance: 2.00
+aggressive_clear:
+    reset_distance: 0.4
+
+voxel_layer:
+  enabled:              true
+  footprint_clearing_enabled: true #Whether to clear the robot's footprint of lethal obstacles
+  max_obstacle_height:  2
+  origin_z:             0.0
+  z_resolution:         0.2
+  z_voxels:             10
+  unknown_threshold:    15 #The number of unknown cells allowed in a column considered to be known
+  mark_threshold:       0 #The maximum number of marked cells allowed in a column considered to be free
+  observation_sources:  laser_scan_sensor point_cloud_sensor
+  obstacle_range: 4.5
+  raytrace_range: 6.0
+  combination_method:   0 #0: overwrites values 1: takes max values 99:do nothing
+  publish_voxel_map: true
+  point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
+                    data_type: PointCloud2, 
+                    topic: /Archimede/d435i_camera/depth/color/points, 
+                    marking: true, 
+                    clearing: true, 
+                    max_obstacle_height: 0.6, 
+                    min_obstacle_height: 0.3}
+  laser_scan_sensor: {sensor_frame: Archimede_scan_link, 
+                    data_type: LaserScan, 
+                    topic: /Archimede/scan, 
+                    marking: true, 
+                    clearing: true,
+                    inf_is_valid: true,
+                    max_obstacle_height: 0.6, 
+                    min_obstacle_height: 0.0}
+
+obstacle_layer:
+  enabled:              true
+  max_obstacle_height:  2
+  origin_z:             0.0
+  z_resolution:         0.2
+  z_voxels:             5
+  unknown_threshold:    15
+  mark_threshold:       0
+  combination_method:   1
+  track_unknown_space:  true    #true needed for disabling global path planning through unknown space
+  obstacle_range: 4.5
+  raytrace_range: 6.0
+  publish_voxel_map: false
+  observation_sources:  laser_scan_sensor point_cloud_sensor
+  point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
+                    data_type: PointCloud2, 
+                    topic: /Archimede/d435i_camera/depth/color/points, 
+                    marking: true, 
+                    clearing: true, 
+                    max_obstacle_height: 0.6, 
+                    min_obstacle_height: 0.3}
+  laser_scan_sensor: {sensor_frame: Archimede_scan_link, 
+                    data_type: LaserScan, 
+                    topic: /Archimede/scan, 
+                    marking: true, 
+                    clearing: true,
+                    inf_is_valid: true,
+                    max_obstacle_height: 0.6, 
+                    min_obstacle_height: 0.0}
+
+inflation_layer:
+  enabled:              true
+  obstacle_range: 4.5
+  raytrace_range: 6.0
+  cost_scaling_factor:  50.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     0.4  # max. distance from an obstacle at which costs are incurred for planning paths.
+  observation_sources:  laser_scan_sensor point_cloud_sensor
+  point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
+                     data_type: PointCloud2, 
+                     topic: /Archimede/d435i_camera/depth/color/points, 
+                     marking: true, 
+                     clearing: true, 
+                     max_obstacle_height: 0.6, 
+                     min_obstacle_height: 0.2}
+  laser_scan_sensor: {sensor_frame: Archimede_scan_link, 
+                     data_type: LaserScan, 
+                     topic: /Archimede/scan, 
+                     marking: true, 
+                     clearing: true,
+                     max_obstacle_height: 0.6, 
+                     min_obstacle_height: 0.0}  
 
 
+static_layer:
+  enabled:              true
+  subscribe_to_updates: true #subscribes to map_update, actually not needed
+  update_frequency:     1.0
+  combination_method:   1
+  track_unknown_space:  true
        

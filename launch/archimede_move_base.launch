@@ -5,7 +5,7 @@
 -->
 
 <launch>
-
+    <arg name="launch_rviz" default="true"/>
     <!-- <master auto="start"/> -->
 
     <?ignore
@@ -16,13 +16,26 @@
     <include file="$(find amcl)/examples/amcl_omni.launch" /> 
     ?>
 
+    <!--- Run Cartographer SLAM -->
+    <include file="$(find robot4ws_slam)/launch/archimede_cartographer_3dslam.launch">
+        <arg name="launch_rviz" value="false" />
+    </include>
+
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find robot4ws_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
     <rosparam file="$(find robot4ws_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find robot4ws_navigation)/config/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find robot4ws_navigation)/config/global_costmap_params.yaml" command="load" /> 
-    <rosparam file="$(find robot4ws_navigation)/config/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find robot4ws_navigation)/config/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find robot4ws_navigation)/config/global_planner_params.yaml" command="load" />
     <remap from="/cmd_vel" to="/Archimede/cmd_vel"/>
+    <remap from="/odom" to="/Archimede/odom"/>
     </node>
+
+   <!--- Run Rviz -->
+    <group if="$(arg launch_rviz)">
+     <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="-d $(find robot4ws_slam)/configuration_files/rviz/navigation.rviz" /> 
+    </group>
 
 </launch> 

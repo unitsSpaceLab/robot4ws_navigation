@@ -10,31 +10,10 @@ local_costmap:
   rolling_window: true # true means that the costmap will remain centered around the robot as the robot moves through the world
   width: 6.0
   height: 6.0
+  origin_x: -3.0
+  origin_y: -3.0
   resolution: 0.05
-  # origin_x: -4
-  # origin_y: -4
-  # transform_tolerance: 0.5 
-  # plugins:
-  #   - {name: inflation_layer,        type: "costmap_2d::InflationLayer"}
-  #   - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
-
-  # plugins: ["obstacle_layer", "inflation_layer"]
-  # inflation_layer:
-  #   plugin: "costmap_2d::InflationLayer"
-  #   cost_scaling_factor: 3.0
-  #   inflation_radius: 0.1
-  # obstacle_layer:
-  #   plugin: "costmap_2d::ObstacleLayer"
-  #   enabled: True
-  #   observation_sources: pointcloud
-  #   pointcloud:
-  #     topic:  /Archimede/d435i_camera/depth/color/points
-  #     max_obstacle_height: 10.0
-  #     min_obstacle_height: 0.2
-  #     obstacle_max_range: 2.5
-  #     obstacle_min_range: 0.0
-  #     raytrace_max_range: 10.0
-  #     raytrace_min_range: 0.0
-  #     clearing: True
-  #     marking: True
-  #     data_type: "PointCloud2"
+  transform_tolerance: 0.5
+  plugins:
+    - {name: voxel_layer,      type: "costmap_2d::VoxelLayer"}
+    - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
