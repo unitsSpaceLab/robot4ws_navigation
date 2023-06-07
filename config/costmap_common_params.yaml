@@ -51,7 +51,7 @@ voxel_layer:
   mark_threshold:       0 #The maximum number of marked cells allowed in a column considered to be free
   observation_sources:  laser_scan_sensor point_cloud_sensor
   obstacle_range: 4.5
-  raytrace_range: 6.0
+  raytrace_range: 8.0
   combination_method:   0 #0: overwrites values 1: takes max values 99:do nothing
   publish_voxel_map: true
   point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
@@ -75,13 +75,13 @@ obstacle_layer:
   max_obstacle_height:  2
   origin_z:             0.0
   z_resolution:         0.2
-  z_voxels:             5
+  z_voxels:             10
   unknown_threshold:    15
   mark_threshold:       0
-  combination_method:   1
+  combination_method:   0
   track_unknown_space:  true    #true needed for disabling global path planning through unknown space
   obstacle_range: 4.5
-  raytrace_range: 6.0
+  raytrace_range: 8.0
   publish_voxel_map: false
   observation_sources:  laser_scan_sensor point_cloud_sensor
   point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
@@ -103,9 +103,9 @@ obstacle_layer:
 inflation_layer:
   enabled:              true
   obstacle_range: 4.5
-  raytrace_range: 6.0
-  cost_scaling_factor:  50.0  # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:     0.4  # max. distance from an obstacle at which costs are incurred for planning paths.
+  raytrace_range: 8.0
+  cost_scaling_factor:  60.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     0.3  # max. distance from an obstacle at which costs are incurred for planning paths.
   observation_sources:  laser_scan_sensor point_cloud_sensor
   point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
                      data_type: PointCloud2, 

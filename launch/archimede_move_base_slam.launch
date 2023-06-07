@@ -5,7 +5,7 @@
 -->
 
 <launch>
-    <arg name="launch_rviz" default="false"/>
+    <arg name="launch_rviz" default="true"/>
     <!-- <master auto="start"/> -->
 
     <?ignore
@@ -14,14 +14,13 @@
 
  <!--- Run AMCL --> 
     <include file="$(find amcl)/examples/amcl_omni.launch" /> 
-    
+    ?>
 
     <!--- Run Cartographer SLAM -->
     <include file="$(find robot4ws_slam)/launch/archimede_cartographer_3dslam.launch">
         <arg name="launch_rviz" value="false" />
     </include>
-     ?>
-     
+
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find robot4ws_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
     <rosparam file="$(find robot4ws_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
