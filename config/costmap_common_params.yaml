@@ -105,7 +105,7 @@ inflation_layer:
   obstacle_range: 4.5
   raytrace_range: 8.0
   cost_scaling_factor:  60.0  # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:     0.3  # max. distance from an obstacle at which costs are incurred for planning paths.
+  inflation_radius:     0.1  # max. distance from an obstacle at which costs are incurred for planning paths.
   observation_sources:  laser_scan_sensor point_cloud_sensor
   point_cloud_sensor: {sensor_frame: rs_d435i_depth_optical_frame, 
                      data_type: PointCloud2, 
